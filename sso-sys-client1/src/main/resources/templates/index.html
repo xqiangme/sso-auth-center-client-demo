@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SSO-client1</title>
+</head>
+<body>
+
+<script type="text/javascript" th:src="@{/static/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/json-viewer.min.js}"></script>
+<link rel="stylesheet" th:href="@{/static/css/json-viewer.min.css}"/>
+
+<h1>SSO-1号测试子系统</h1>
+<h2>欢迎访问 SSO Demo 之 " 1号-测试子系统  "。。。。。。我是MD5加签与认证中心交互-示例 </h2>
+<p><a href="/welcome">welcome.html</a></p>
+
+<p><a th:href="${logOutUrl}">退出当前系统</a></p>
+
+<h4 id="token"> </h4>
+<h3> 用户信息如下：</h3>
+<pre id="user"></pre>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "/getUserInfo",
+            success: function (result) {
+                $('#user').jsonViewer(JSON.parse(result.data));
+            }
+        });
+        $('#token').html(" ssoToken值: "+getCookie("ssoToken"));
+    });
+
+    function getCookie(name) {
+        const prefix = name + "=";
+        const start = document.cookie.indexOf(prefix);
+
+        if (start === -1) {
+            return null;
+        }
+        let end = document.cookie.indexOf(";", start + prefix.length);
+        if (end === -1) {
+            end = document.cookie.length;
+        }
+        const value = document.cookie.substring(start + prefix.length, end);
+        return unescape(value);
+    }
+</script>
+</body>
+</html>
