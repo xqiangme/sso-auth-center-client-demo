@@ -47,12 +47,16 @@ public class AuthService {
 		}
 
 		ResultModel resultModel = JSON.parseObject(response, ResultModel.class);
-		if (null == resultModel || StringUtils.isBlank(resultModel.getData().toString())) {
+		if (null == resultModel) {
 			throw new RuntimeException("认证中心-无返回");
 		}
 
 		if (!resultModel.getCode().equals(SUCCESS_CODE)) {
 			throw new RuntimeException("认证中心调用失败，" + resultModel.getMsg());
+		}
+
+		if ( StringUtils.isBlank(resultModel.getData().toString())) {
+			throw new RuntimeException("认证中心-无Data返回");
 		}
 
 		return JSON.parseObject(resultModel.getData().toString(), ApplyAuthVO.class);
